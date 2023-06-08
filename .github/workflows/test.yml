@@ -137,6 +137,13 @@ jobs:
           name: build-e2e
           path: build
 
+      - uses: actions/cache@v3
+        id: hardhat-cache
+        with:
+          path: cache
+          key: ${{ runner.os }}-hardhat-${{ hashFiles('hardhat.config.js') }}-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-hardhat-${{ hashFiles('hardhat.config.js') }}-
+
       - uses: cypress-io/github-action@v4
         with:
           install: false
@@ -160,12 +167,11 @@ jobs:
           CYPRESS_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
           CYPRESS_PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
 
-      - uses: codecov/codecov-action@v3
+      - if: failure() && github.ref_name == 'main'
+        uses: ./.github/actions/report
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
-          flags: e2e-tests
+          name: Cypress tests
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_REPORTER_WEBHOOK }}
 
   # Included as a single job to check for cypress-test-matrix success, as a matrix cannot be checked.
   cypress-tests:
@@ -173,11 +179,5 @@ jobs:
     needs: [cypress-test-matrix]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - if: needs.cypress-test-matrix.result != 'success'
         run: exit 1
-      - if: failure() && github.ref_name == 'main'
-        uses: ./.github/actions/report
-        with:
-          name: Cypress tests
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_REPORTER_WEBHOOK }}
