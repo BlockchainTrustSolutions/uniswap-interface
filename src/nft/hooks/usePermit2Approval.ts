@@ -1,7 +1,6 @@
 import { sendAnalyticsEvent } from '@uniswap/analytics'
 import { InterfaceEventName } from '@uniswap/analytics-events'
 import { CurrencyAmount, SupportedChainId, Token } from '@uniswap/sdk-core'
-import { UNIVERSAL_ROUTER_ADDRESS } from '@uniswap/universal-router-sdk'
 import { useWeb3React } from '@web3-react/core'
 import usePermit2Allowance, { AllowanceState } from 'hooks/usePermit2Allowance'
 import { useCallback, useMemo, useState } from 'react'
@@ -12,10 +11,10 @@ function getURAddress(chainId?: number, nftURAddress?: string) {
 
   // if mainnet and on NFT flow, use the contract address returned by GQL
   if (chainId === SupportedChainId.MAINNET) {
-    return nftURAddress ?? UNIVERSAL_ROUTER_ADDRESS(chainId)
+    return nftURAddress ?? '0x6af1D4D6719B6B58e10363Ff859ADf0337E46A13'
   }
 
-  return UNIVERSAL_ROUTER_ADDRESS(chainId)
+  return '0x6af1D4D6719B6B58e10363Ff859ADf0337E46A13'
 }
 
 export default function usePermit2Approval(

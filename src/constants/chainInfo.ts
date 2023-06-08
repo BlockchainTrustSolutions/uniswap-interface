@@ -71,6 +71,16 @@ const CHAIN_INFO: ChainInfoMap = {
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: darkTheme.chain_1,
   },
+  [SupportedChainId.SWISSDLT]: {
+    networkType: NetworkType.L1,
+    docs: 'https://docs.uniswap.org/',
+    explorer: 'https://explorer.swissdlt.ch/',
+    infoLink: 'https://info.uniswap.org/#/',
+    label: 'SwissDLT',
+    logoUrl: ethereumLogoUrl,
+    nativeCurrency: { name: 'BCTS', symbol: 'BCTS', decimals: 18 },
+    color: darkTheme.chain_1,
+  },
   [SupportedChainId.GOERLI]: {
     networkType: NetworkType.L1,
     docs: 'https://docs.uniswap.org/',
