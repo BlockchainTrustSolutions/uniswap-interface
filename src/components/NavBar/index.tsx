@@ -1,3 +1,4 @@
+import bctsLogoUrl from 'assets/images/bcts_logo.png'
 import { Trans } from '@lingui/macro'
 import { useWeb3React } from '@web3-react/core'
 import { useAccountDrawer } from 'components/AccountDrawer'
@@ -65,17 +66,19 @@ export const PageTabs = () => {
 
   return (
     <>
-      <MenuItem href="/swap" isActive={pathname.startsWith('/swap')}>
+      <MenuItem href="/" isActive={pathname.startsWith('/swap')}>
         <Trans>Swap</Trans>
       </MenuItem>
+      {/*
       <MenuItem href={`/tokens/${chainName.toLowerCase()}`} isActive={pathname.startsWith('/tokens')}>
         <Trans>Tokens</Trans>
       </MenuItem>
-      {!shouldDisableNFTRoutes && (
+      */}
+      {/*!shouldDisableNFTRoutes && (
         <MenuItem dataTestId="nft-nav" href="/nfts" isActive={isNftPage}>
           <Trans>NFTs</Trans>
         </MenuItem>
-      )}
+      )*/}
       <Box display={{ sm: 'flex', lg: 'none', xxl: 'flex' }} width="full">
         <MenuItem href="/pools" dataTestId="pool-nav-link" isActive={isPoolActive}>
           <Trans>Pools</Trans>
@@ -130,6 +133,7 @@ const Navbar = ({ blur }: { blur: boolean }) => {
               <PageTabs />
             </Row>
           </Box>
+          {/*
           <Box
             className={styles.searchContainer}
             {...(isNavSearchInputVisible && {
@@ -138,6 +142,7 @@ const Navbar = ({ blur }: { blur: boolean }) => {
           >
             <SearchBar />
           </Box>
+          */}
           <Box className={styles.rightSideContainer}>
             <Row gap="12">
               <Box position="relative" display={isNavSearchInputVisible ? 'none' : { sm: 'flex' }}>

@@ -1,3 +1,4 @@
+import bctsLogoUrl from 'assets/images/bcts_logo.png'
 import bnbCircleLogoUrl from 'assets/images/bnbCircle.svg'
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png'
 import polygonCircleLogoUrl from 'assets/images/polygonCircle.png'
@@ -76,7 +77,7 @@ const CHAIN_INFO: ChainInfoMap = {
     explorer: 'https://explorer.swissdlt.ch/',
     infoLink: 'https://info.uniswap.org/#/',
     label: 'SwissDLT',
-    logoUrl: ethereumLogoUrl,
+    logoUrl: bctsLogoUrl,
     nativeCurrency: { name: 'BCTS', symbol: 'BCTS', decimals: 18 },
     color: darkTheme.chain_1,
   },

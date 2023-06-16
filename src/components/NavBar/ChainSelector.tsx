@@ -22,11 +22,7 @@ import * as styles from './ChainSelector.css'
 import ChainSelectorRow from './ChainSelectorRow'
 import { NavDropdown } from './NavDropdown'
 
-const NETWORK_SELECTOR_CHAINS = [SupportedChainId.MAINNET,SupportedChainId.SWISSDLT]
-
-if (!isProductionEnv()) {
-  NETWORK_SELECTOR_CHAINS.push(SupportedChainId.SEPOLIA)
-}
+const NETWORK_SELECTOR_CHAINS = [SupportedChainId.SWISSDLT]
 
 interface ChainSelectorProps {
   leftAlign?: boolean

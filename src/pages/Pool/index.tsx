@@ -230,26 +230,6 @@ export default function Pool() {
     {
       content: (
         <PoolMenuItem>
-          <Trans>Migrate</Trans>
-          <ChevronsRight size={16} />
-        </PoolMenuItem>
-      ),
-      link: '/migrate/v2',
-      external: false,
-    },
-    {
-      content: (
-        <PoolMenuItem>
-          <Trans>V2 liquidity</Trans>
-          <Layers size={16} />
-        </PoolMenuItem>
-      ),
-      link: '/pools/v2',
-      external: false,
-    },
-    {
-      content: (
-        <PoolMenuItem>
           <Trans>Learn</Trans>
           <BookOpen size={16} />
         </PoolMenuItem>

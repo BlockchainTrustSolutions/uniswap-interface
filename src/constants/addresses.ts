@@ -1,11 +1,16 @@
-import { FACTORY_ADDRESS as V2_FACTORY_ADDRESS } from '@uniswap/v2-sdk'
-import { FACTORY_ADDRESS as V3_FACTORY_ADDRESS } from '@uniswap/v3-sdk'
+import {FACTORY_ADDRESS as V2_FACTORY_ADDRESS} from '@uniswap/v2-sdk'
+import {FACTORY_ADDRESS as V3_FACTORY_ADDRESS} from '@uniswap/v3-sdk'
 
-import { SupportedChainId } from './chains'
+import {SupportedChainId} from './chains'
 
 type AddressMap = { [chainId: number]: string }
 
-const DEFAULT_NETWORKS = [SupportedChainId.MAINNET, SupportedChainId.GOERLI, SupportedChainId.SEPOLIA]
+const DEFAULT_NETWORKS = [
+  SupportedChainId.SWISSDLT,
+  SupportedChainId.MAINNET,
+  SupportedChainId.GOERLI,
+  SupportedChainId.SEPOLIA,
+]
 
 function constructSameAddressMap(address: string, additionalNetworks: SupportedChainId[] = []): AddressMap {
   return DEFAULT_NETWORKS.concat(additionalNetworks).reduce<AddressMap>((memo, chainId) => {

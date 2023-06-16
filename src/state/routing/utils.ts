@@ -4,7 +4,7 @@ import { AlphaRouter, ChainId } from '@uniswap/smart-order-router'
 import { Pair, Route as V2Route } from '@uniswap/v2-sdk'
 import { FeeAmount, Pool, Route as V3Route } from '@uniswap/v3-sdk'
 import { RPC_PROVIDERS } from 'constants/providers'
-import { isBsc, isMatic, nativeOnChain } from 'constants/tokens'
+import {isBcts, isBsc, isMatic, nativeOnChain} from 'constants/tokens'
 import { toSupportedChainId } from 'lib/hooks/routing/clientSideSmartOrderRouter'
 
 import { GetQuoteArgs, INTERNAL_ROUTER_PREFERENCE_PRICE, RouterPreference } from './slice'
@@ -181,6 +181,7 @@ export function currencyAddressForSwapQuote(currency: Currency): string {
   if (currency.isNative) {
     if (isMatic(currency.chainId)) return SwapRouterNativeAssets.MATIC
     if (isBsc(currency.chainId)) return SwapRouterNativeAssets.BNB
+    if (isBcts(currency.chainId)) return SwapRouterNativeAssets.BCTS
     return SwapRouterNativeAssets.ETH
   }
 

@@ -151,4 +151,5 @@ export enum SwapRouterNativeAssets {
   MATIC = 'MATIC',
   BNB = 'BNB',
   ETH = 'ETH',
+  BCTS = 'BCTS',
 }
