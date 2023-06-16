@@ -26,13 +26,13 @@ export const FALLBACK_URLS = {
     'https://cloudflare-eth.com',
     // "Fallback" URLs
     'https://rpc.ankr.com/eth',
-    'https://eth-mainnet.public.blastapi.io',
+    'https://eth-mainnet.public.blastapi.io'
   ],
   [SupportedChainId.GOERLI]: [
     // "Safe" URLs
     'https://rpc.goerli.mudit.blog/',
     // "Fallback" URLs
-    'https://rpc.ankr.com/eth_goerli',
+    'https://rpc.ankr.com/eth_goerli'
   ],
   [SupportedChainId.SEPOLIA]: [
     // "Safe" URLs
@@ -52,23 +52,23 @@ export const FALLBACK_URLS = {
     'https://matic-mainnet.chainstacklabs.com',
     'https://rpc-mainnet.maticvigil.com',
     'https://rpc-mainnet.matic.quiknode.pro',
-    'https://matic-mainnet-full-rpc.bwarelabs.com',
+    'https://matic-mainnet-full-rpc.bwarelabs.com'
   ],
   [SupportedChainId.POLYGON_MUMBAI]: [
     // "Safe" URLs
     'https://matic-mumbai.chainstacklabs.com',
     'https://rpc-mumbai.maticvigil.com',
-    'https://matic-testnet-archive-rpc.bwarelabs.com',
+    'https://matic-testnet-archive-rpc.bwarelabs.com'
   ],
   [SupportedChainId.ARBITRUM_ONE]: [
     // "Safe" URLs
     'https://arb1.arbitrum.io/rpc',
     // "Fallback" URLs
-    'https://arbitrum.public-rpc.com',
+    'https://arbitrum.public-rpc.com'
   ],
   [SupportedChainId.ARBITRUM_GOERLI]: [
     // "Safe" URLs
-    'https://goerli-rollup.arbitrum.io/rpc',
+    'https://goerli-rollup.arbitrum.io/rpc'
   ],
   [SupportedChainId.OPTIMISM]: [
     // "Safe" URLs
@@ -78,15 +78,15 @@ export const FALLBACK_URLS = {
   ],
   [SupportedChainId.OPTIMISM_GOERLI]: [
     // "Safe" URLs
-    'https://goerli.optimism.io',
+    'https://goerli.optimism.io'
   ],
   [SupportedChainId.CELO]: [
     // "Safe" URLs
-    `https://forno.celo.org`,
+    `https://forno.celo.org`
   ],
   [SupportedChainId.CELO_ALFAJORES]: [
     // "Safe" URLs
-    `https://alfajores-forno.celo-testnet.org`,
+    `https://alfajores-forno.celo-testnet.org`
   ],
   [SupportedChainId.BNB]: [
     // "Safe" URLs
@@ -98,7 +98,11 @@ export const FALLBACK_URLS = {
     'https://bsc-dataseed1.ninicoin.io',
     'https://binance.nodereal.io',
     'https://bsc-dataseed4.defibit.io',
-    'https://rpc.ankr.com/bsc',
+    'https://rpc.ankr.com/bsc'
+  ],
+  [SupportedChainId.SWISSDLT]: [
+    // "Safe" URLs
+    'https://rpc2.swissdlt.ch'
   ],
 }
 
@@ -109,7 +113,7 @@ export const FALLBACK_URLS = {
 export const RPC_URLS = {
   [SupportedChainId.MAINNET]: [
     `https://mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.MAINNET],
+    ...FALLBACK_URLS[SupportedChainId.MAINNET]
   ],
   [SupportedChainId.GOERLI]: [`https://goerli.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.GOERLI]],
   [SupportedChainId.SEPOLIA]: [
@@ -118,29 +122,33 @@ export const RPC_URLS = {
   ],
   [SupportedChainId.OPTIMISM]: [
     `https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.OPTIMISM],
+    ...FALLBACK_URLS[SupportedChainId.OPTIMISM]
   ],
   [SupportedChainId.OPTIMISM_GOERLI]: [
     `https://optimism-goerli.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.OPTIMISM_GOERLI],
+    ...FALLBACK_URLS[SupportedChainId.OPTIMISM_GOERLI]
   ],
   [SupportedChainId.ARBITRUM_ONE]: [
     `https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.ARBITRUM_ONE],
+    ...FALLBACK_URLS[SupportedChainId.ARBITRUM_ONE]
   ],
   [SupportedChainId.ARBITRUM_GOERLI]: [
     `https://arbitrum-goerli.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.ARBITRUM_GOERLI],
+    ...FALLBACK_URLS[SupportedChainId.ARBITRUM_GOERLI]
   ],
   [SupportedChainId.POLYGON]: [
     `https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.POLYGON],
+    ...FALLBACK_URLS[SupportedChainId.POLYGON]
   ],
   [SupportedChainId.POLYGON_MUMBAI]: [
     `https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI],
+    ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI]
   ],
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
   [SupportedChainId.BNB]: [QUICKNODE_RPC_URL, ...FALLBACK_URLS[SupportedChainId.BNB]],
+  [SupportedChainId.SWISSDLT]: [
+    `https://rpc.swissdlt.ch`,
+    ...FALLBACK_URLS[SupportedChainId.SWISSDLT]
+  ]
 }

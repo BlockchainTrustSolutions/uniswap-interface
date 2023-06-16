@@ -472,6 +472,13 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId: number]: Token | undefined } =
     'WBNB',
     'Wrapped BNB'
   ),
+  [SupportedChainId.SWISSDLT]: new Token(
+    SupportedChainId.SWISSDLT,
+    '0x4C9204BE7d41E8b1d0f8025A60110d866C0574Ad',
+    18,
+    'WBCTS',
+    'Wrapped BCTS'
+  ),
 }
 
 export function isCelo(chainId: number): chainId is SupportedChainId.CELO | SupportedChainId.CELO_ALFAJORES {
@@ -508,6 +515,28 @@ class MaticNativeCurrency extends NativeCurrency {
   public constructor(chainId: number) {
     if (!isMatic(chainId)) throw new Error('Not matic')
     super(chainId, 18, 'MATIC', 'Polygon Matic')
+  }
+}
+
+export function isBcts(chainId: number): chainId is SupportedChainId.SWISSDLT {
+  return chainId === SupportedChainId.SWISSDLT
+}
+
+class BctsNativeCurrency extends NativeCurrency {
+  equals(other: Currency): boolean {
+    return other.isNative && other.chainId === this.chainId
+  }
+
+  get wrapped(): Token {
+    if (!isBcts(this.chainId)) throw new Error('Not bcts')
+    const wrapped = WRAPPED_NATIVE_CURRENCY[this.chainId]
+    invariant(wrapped instanceof Token)
+    return wrapped
+  }
+
+  public constructor(chainId: number) {
+    if (!isBcts(chainId)) throw new Error('Not bcts')
+    super(chainId, 18, 'BCTS', 'BCTS')
   }
 }
 
@@ -557,6 +586,8 @@ export function nativeOnChain(chainId: number): NativeCurrency | Token {
     nativeCurrency = getCeloNativeCurrency(chainId)
   } else if (isBsc(chainId)) {
     nativeCurrency = new BscNativeCurrency(chainId)
+  } else if (isBcts(chainId)) {
+    nativeCurrency = new BctsNativeCurrency(chainId)
   } else {
     nativeCurrency = ExtendedEther.onChain(chainId)
   }

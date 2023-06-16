@@ -107,6 +107,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     CAKE_BSC,
   ],
   [SupportedChainId.CELO]: [CUSD_CELO, CEUR_CELO, CMC02_CELO, PORTAL_USDC_CELO, PORTAL_ETH_CELO],
+  [SupportedChainId.SWISSDLT]: [
+    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.SWISSDLT],
+  ],
 }
 export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: Token[] } } = {
   [SupportedChainId.MAINNET]: {
@@ -209,6 +212,7 @@ export const COMMON_BASES: ChainCurrencyList = {
     BTC_BSC,
     BUSD_BSC,
   ],
+  [SupportedChainId.SWISSDLT]: [nativeOnChain(SupportedChainId.SWISSDLT),],
 }
 
 // This is the same as COMMON_BASES except it swaps out Bridged USDC on arbitrum for native USDC.
