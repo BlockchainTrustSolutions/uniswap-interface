@@ -49,8 +49,6 @@ function useWalletSupportedChains() {
   switch (connectionType) {
     case ConnectionType.WALLET_CONNECT_V2:
       return getChainsFromEIP155Accounts((connector as WalletConnect).provider?.session?.namespaces.eip155.accounts)
-    case ConnectionType.UNISWAP_WALLET:
-      return UniWalletSupportedChains
     default:
       return NETWORK_SELECTOR_CHAINS
   }

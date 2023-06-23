@@ -194,33 +194,6 @@ describe('Should gracefully handle intentional user-rejection errors', () => {
     expect(onSuccess).toHaveBeenCalledTimes(1)
   })
 
-  it('handles Coinbase user-rejection error', async () => {
-    const result = renderHook(useActivationState).result
-
-    const coinbaseConnection = createMockConnection(
-      jest
-        .fn()
-        .mockImplementationOnce(() => Promise.reject(ErrorCode.CB_REJECTED_REQUEST))
-        .mockImplementationOnce(() => Promise.resolve),
-      jest.fn(),
-      ConnectionType.COINBASE_WALLET
-    )
-
-    const onSuccess = jest.fn()
-
-    await act(() => result.current.tryActivation(coinbaseConnection, onSuccess))
-
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
-    expect(coinbaseConnection.connector.activate).toHaveBeenCalledTimes(1)
-    expect(onSuccess).toHaveBeenCalledTimes(0)
-
-    await act(() => result.current.tryActivation(coinbaseConnection, onSuccess))
-
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
-    expect(coinbaseConnection.connector.activate).toHaveBeenCalledTimes(2)
-    expect(onSuccess).toHaveBeenCalledTimes(1)
-  })
-
   it('handles WalletConect Modal close error', async () => {
     const result = renderHook(useActivationState).result
 

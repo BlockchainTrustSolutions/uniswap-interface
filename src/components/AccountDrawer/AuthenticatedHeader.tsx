@@ -13,7 +13,7 @@ import Tooltip from 'components/Tooltip'
 import { useGetConnection } from 'connection'
 import { usePortfolioBalancesQuery } from 'graphql/data/__generated__/types-and-hooks'
 import { useAtomValue } from 'jotai/utils'
-import { useProfilePageState, useSellAsset, useWalletCollections } from 'nft/hooks'
+import {useProfilePageState, useSellAsset, useWalletBalance, useWalletCollections} from 'nft/hooks'
 import { useIsNftClaimAvailable } from 'nft/hooks/useIsNftClaimAvailable'
 import { ProfilePageStateType } from 'nft/types'
 import { useCallback, useState } from 'react'
@@ -34,6 +34,7 @@ import { useToggleAccountDrawer } from '.'
 import IconButton, { IconHoverText, IconWithConfirmTextButton } from './IconButton'
 import MiniPortfolio from './MiniPortfolio'
 import { portfolioFadeInAnimation } from './MiniPortfolio/PortfolioRow'
+import {useNativeCurrencyBalances} from "../../lib/hooks/useCurrencyBalance";
 
 const AuthenticatedHeaderWrapper = styled.div`
   padding: 20px 16px;
@@ -119,15 +120,6 @@ const AccountNamesWrapper = styled.div`
   gap: 2px;
 `
 
-const StyledInfoIcon = styled(Info)`
-  height: 12px;
-  width: 12px;
-  flex: 1 1 auto;
-`
-const StyledLoadingButtonSpinner = styled(LoadingButtonSpinner)`
-  fill: ${({ theme }) => theme.accentAction};
-`
-
 const HeaderWrapper = styled.div`
   margin-bottom: 20px;
   display: flex;
@@ -167,21 +159,9 @@ const LogOutCentered = styled(LogOut)`
 export default function AuthenticatedHeader({ account, openSettings }: { account: string; openSettings: () => void }) {
   const { connector, ENSName } = useWeb3React()
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const closeModal = useCloseModal()
-  const setSellPageState = useProfilePageState((state) => state.setProfilePageState)
-  const resetSellAssets = useSellAsset((state) => state.reset)
-  const clearCollectionFilters = useWalletCollections((state) => state.clearCollectionFilters)
-  const isClaimAvailable = useIsNftClaimAvailable((state) => state.isClaimAvailable)
-
-  const shouldDisableNFTRoutes = useAtomValue(shouldDisableNFTRoutesAtom)
-
-  const unclaimedAmount: CurrencyAmount<Token> | undefined = useUserUnclaimedAmount(account)
-  const isUnclaimed = useUserHasAvailableClaim(account)
   const getConnection = useGetConnection()
+  const balance = useWalletBalance()
   const connection = getConnection(connector)
-  const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-  const openNftModal = useToggleModal(ApplicationModal.UNISWAP_NFT_AIRDROP_CLAIM)
   const disconnect = useCallback(() => {
     if (connector && connector.deactivate) {
       connector.deactivate()
@@ -189,46 +169,6 @@ export default function AuthenticatedHeader({ account, openSettings }: { account
     connector.resetState()
     dispatch(updateSelectedWallet({ wallet: undefined }))
   }, [connector, dispatch])
-
-  const toggleWalletDrawer = useToggleAccountDrawer()
-
-  const navigateToProfile = useCallback(() => {
-    toggleWalletDrawer()
-    resetSellAssets()
-    setSellPageState(ProfilePageStateType.VIEWING)
-    clearCollectionFilters()
-    navigate('/nfts/profile')
-    closeModal()
-  }, [clearCollectionFilters, closeModal, navigate, resetSellAssets, setSellPageState, toggleWalletDrawer])
-
-  const openFiatOnrampModal = useOpenModal(ApplicationModal.FIAT_ONRAMP)
-  const openFoRModalWithAnalytics = useCallback(() => {
-    toggleWalletDrawer()
-    sendAnalyticsEvent(InterfaceEventName.FIAT_ONRAMP_WIDGET_OPENED)
-    openFiatOnrampModal()
-  }, [openFiatOnrampModal, toggleWalletDrawer])
-
-  const [shouldCheck, setShouldCheck] = useState(false)
-  const {
-    available: fiatOnrampAvailable,
-    availabilityChecked: fiatOnrampAvailabilityChecked,
-    error,
-    loading: fiatOnrampAvailabilityLoading,
-  } = useFiatOnrampAvailability(shouldCheck, openFoRModalWithAnalytics)
-
-  const handleBuyCryptoClick = useCallback(() => {
-    if (!fiatOnrampAvailabilityChecked) {
-      setShouldCheck(true)
-    } else if (fiatOnrampAvailable) {
-      openFoRModalWithAnalytics()
-    }
-  }, [fiatOnrampAvailabilityChecked, fiatOnrampAvailable, openFoRModalWithAnalytics])
-  const disableBuyCryptoButton = Boolean(
-    error || (!fiatOnrampAvailable && fiatOnrampAvailabilityChecked) || fiatOnrampAvailabilityLoading
-  )
-  const [showFiatOnrampUnavailableTooltip, setShow] = useState<boolean>(false)
-  const openFiatOnrampUnavailableTooltip = useCallback(() => setShow(true), [setShow])
-  const closeFiatOnrampUnavailableTooltip = useCallback(() => setShow(false), [setShow])
 
   const { data: portfolioBalances } = usePortfolioBalancesQuery({
     variables: { ownerAddress: account ?? '' },
@@ -279,23 +219,11 @@ export default function AuthenticatedHeader({ account, openSettings }: { account
         </IconContainer>
       </HeaderWrapper>
       <PortfolioDrawerContainer>
-        {totalBalance !== undefined ? (
+        {balance !== undefined ? (
           <FadeInColumn gap="xs">
             <ThemedText.HeadlineLarge fontWeight={500} data-testid="portfolio-total-balance">
-              {formatNumber(totalBalance, NumberType.PortfolioBalance)}
+              {formatNumber(Number(balance.balance), NumberType.TokenTx)} BCTS
             </ThemedText.HeadlineLarge>
-            <AutoRow marginBottom="20px">
-              {absoluteChange !== 0 && percentChange && (
-                <>
-                  <PortfolioArrow change={absoluteChange as number} />
-                  <ThemedText.BodySecondary>
-                    {`${formatNumber(Math.abs(absoluteChange as number), NumberType.PortfolioBalance)} (${formatDelta(
-                      percentChange
-                    )})`}
-                  </ThemedText.BodySecondary>
-                </>
-              )}
-            </AutoRow>
           </FadeInColumn>
         ) : (
           <Column gap="xs">
@@ -303,65 +231,7 @@ export default function AuthenticatedHeader({ account, openSettings }: { account
             <LoadingBubble height="16px" width="100px" margin="4px 0 20px 0" />
           </Column>
         )}
-        {!shouldDisableNFTRoutes && (
-          <HeaderButton
-            data-testid="nft-view-self-nfts"
-            onClick={navigateToProfile}
-            size={ButtonSize.medium}
-            emphasis={ButtonEmphasis.medium}
-          >
-            <Trans>View and sell NFTs</Trans>
-          </HeaderButton>
-        )}
-        <HeaderButton
-          size={ButtonSize.medium}
-          emphasis={ButtonEmphasis.medium}
-          onClick={handleBuyCryptoClick}
-          disabled={disableBuyCryptoButton}
-          data-testid="wallet-buy-crypto"
-        >
-          {error ? (
-            <ThemedText.BodyPrimary>{error}</ThemedText.BodyPrimary>
-          ) : (
-            <>
-              {fiatOnrampAvailabilityLoading ? (
-                <StyledLoadingButtonSpinner />
-              ) : (
-                <CreditCard height="20px" width="20px" />
-              )}{' '}
-              <Trans>Buy crypto</Trans>
-            </>
-          )}
-        </HeaderButton>
-        {Boolean(!fiatOnrampAvailable && fiatOnrampAvailabilityChecked) && (
-          <FiatOnrampNotAvailableText marginTop="8px">
-            <Trans>Not available in your region</Trans>
-            <Tooltip
-              show={showFiatOnrampUnavailableTooltip}
-              text={<Trans>Moonpay is not available in some regions. Click to learn more.</Trans>}
-            >
-              <FiatOnrampAvailabilityExternalLink
-                onMouseEnter={openFiatOnrampUnavailableTooltip}
-                onMouseLeave={closeFiatOnrampUnavailableTooltip}
-                style={{ color: 'inherit' }}
-                href="https://support.uniswap.org/hc/en-us/articles/11306664890381-Why-isn-t-MoonPay-available-in-my-region-"
-              >
-                <StyledInfoIcon />
-              </FiatOnrampAvailabilityExternalLink>
-            </Tooltip>
-          </FiatOnrampNotAvailableText>
-        )}
         <MiniPortfolio account={account} />
-        {isUnclaimed && (
-          <UNIButton onClick={openClaimModal} size={ButtonSize.medium} emphasis={ButtonEmphasis.medium}>
-            <Trans>Claim</Trans> {unclaimedAmount?.toFixed(0, { groupSeparator: ',' } ?? '-')} <Trans>reward</Trans>
-          </UNIButton>
-        )}
-        {isClaimAvailable && (
-          <UNIButton size={ButtonSize.medium} emphasis={ButtonEmphasis.medium} onClick={openNftModal}>
-            <Trans>Claim Uniswap NFT Airdrop</Trans>
-          </UNIButton>
-        )}
       </PortfolioDrawerContainer>
     </AuthenticatedHeaderWrapper>
   )
